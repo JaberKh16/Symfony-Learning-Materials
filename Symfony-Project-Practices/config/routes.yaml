@@ -1,0 +1,22 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+
+# homepage:
+# resource: ../src/Controller/HomepageController.php
+#   type: attribute
+
+# about:
+#   resource: ../src/Controller/HomepageController.php
+#   type: attribute
+
+# contact:
+#   resource: ../src/Controller/HomepageController.php
+#   type: attribute
+
+# list_items:
+#   path: /list-items
+#   resource: ../src/Controller/HomepageController.php
+#   type: attribute
