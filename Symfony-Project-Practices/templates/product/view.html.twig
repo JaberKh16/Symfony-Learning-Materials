@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product View{% endblock %}
+
+{% block body %}
+    <h1>Product View</h1>
+    <p><strong>Name:</strong> {{ product.name }}</p>
+    <p><strong>SKU:</strong> {{ product.sku }}</p>
+    <p><strong>Price:</strong> {{ product.price }}</p>
+    <p><strong>Entry Date:</strong> {{ product.entryDate|date('Y-m-d') }}</p>
+    <p><strong>Status:</strong> {{ product.status }}</p>
+{% endblock %}
