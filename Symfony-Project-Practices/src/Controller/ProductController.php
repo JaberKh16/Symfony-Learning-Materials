@@ -35,4 +35,16 @@ final class ProductController extends AbstractController
             "products" => $products,
         ]);
     }
+
+    public function listProducts(
+        EntityManagerInterface $entityManager,
+    ): Response {
+        // Implementation for listing products
+        $repository = $entityManager->getRepository(Product::class);
+        $products = $repository->findAll();
+
+        return $this->render("product/list.html.twig", [
+            "products" => $products,
+        ]);
+    }
 }

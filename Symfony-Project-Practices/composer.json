@@ -73,7 +73,6 @@
     "doctrine/orm": "^3.6",
     "symfony/maker-bundle": "^1.67",
     "symfony/stopwatch": "7.0.*",
-    "symfony/validator": "7.0.*",
     "symfony/web-profiler-bundle": "7.0.*"
   }
 }
