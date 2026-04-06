@@ -5,9 +5,29 @@
 {% block body %}
 <h1 class="bg-primary text-white p-3">List of Products</h1>
 <button class="btn btn-success mb-3" onclick="window.location.href='{{ path('product_create') }}'">Create New Product</button>
-<ul>
-    {% for product in products %}
-        <li>{{ product.name }}</li>
-    {% endfor %}
-</ul>
+
+
+<table class="w-full border-collapse border border-gray-300">
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left">Product Name</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">SKU</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr class="hover:bg-gray-100">
+            <td class="border border-gray-300 px-4 py-2">{{ product.name }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ product.sku }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ product.price }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+                <button class="btn btn-sm btn-primary" onclick="window.location.href='{{ path('product_edit', {'id': product.id}) }}'">Edit</button>
+                <button class="btn btn-sm btn-danger" onclick="window.location.href='{{ path('product_delete', {'id': product.id}) }}'">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
