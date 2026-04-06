@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ProductRepository; // add the ProductRepository class here
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Product;
 use App\Form\ProductType;
 
@@ -54,10 +55,10 @@ final class ProductController extends AbstractController
     }
 
     // view a single product
-    #[Route("/product/{id}", name: "product_show")]
-    public function show($id): Response
+    #[Route("/products/{id}", name: "product_show")]
+    public function show($id, ManagerRegistry $managerRegistry): Response
     {
-        $repository = $this->getDoctrine()->getRepository(Product::class);
+        $repository = $managerRegistry->getRepository(Product::class);
         $product = $repository->find($id);
 
         if (!$product) {
@@ -70,23 +71,24 @@ final class ProductController extends AbstractController
     }
 
     // create a new product
-    #[Route("/product/new", name: "product_new")]
-    public function create(Request $request): Response
+    #[Route("/products/new", name: "product_create")]
+    public function create(Request $request, ManagerRegistry $managerRegistry): Response
     {
         $product = new Product();
         // $product->setCreatedAt(new \DateTimeImmutable());
         $form = $this->createForm(ProductType::class, $product);
+        dd($form);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $managerRegistry->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
 
             return $this->redirectToRoute("product_list");
         }
 
-        return $this->render("product/new.html.twig", [
+        return $this->render("product/create.html.twig", [
             "form" => $form->createView(),
         ]);
     }

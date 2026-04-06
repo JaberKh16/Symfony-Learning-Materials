@@ -3,7 +3,8 @@
 {% block title %} List of Products {% endblock %}
 
 {% block body %}
-<h1>List of Products</h1>
+<h1 class="bg-primary text-white p-3">List of Products</h1>
+<button class="btn btn-success mb-3" onclick="window.location.href='{{ path('product_create') }}'">Create New Product</button>
 <ul>
     {% for product in products %}
         <li>{{ product.name }}</li>
