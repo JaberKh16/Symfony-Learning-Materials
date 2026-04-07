@@ -10,6 +10,7 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            <script src="https://unpkg.com/alpinejs" defer></script>
         {% endblock %}
 
         {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
@@ -21,13 +22,7 @@
     </head>
     <body>
         {# flash messages #}
-        {% for label, messages in app.flashes %}
-            <div class="flash-{{ label }}">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endfor %}
+        {% include 'partials/flash-message.html.twig' %}
 
         {% block body %}{% endblock %}
     </body>

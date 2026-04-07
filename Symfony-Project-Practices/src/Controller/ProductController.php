@@ -28,7 +28,8 @@ class ProductController extends AbstractController
     {
         // Implementation for listing products
         $repository = $entityManager->getRepository(Product::class);
-        $products = $repository->findAll();
+        // $products = $repository->findAll(); // fetch in ascending order by id
+        $products = $repository->findBy([], ['entry_date' => 'DESC']); // fetch in descending order by entry_date
 
         if(!$products) {
             throw $this->createNotFoundException("No products found");
@@ -66,6 +67,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         
+        // dd($form->getErrors(true, false));
 
         // dd($request->request->all(), $form->isSubmitted(), $form->isValid(), $product);
 
@@ -97,7 +99,8 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
-
+            // flash a success message to the session
+            $this->addFlash("success", "Product updated successfully!");
             return $this->redirectToRoute("product_list");
         }
 

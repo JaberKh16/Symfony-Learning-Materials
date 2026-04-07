@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Assert\Length;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraint as Assert;
+
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -16,23 +18,54 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: "Product name should not be blank")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "Product name must be at least {{ limit }} characters long",
+        maxMessage: "Product name cannot be longer than {{ limit }} characters"
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
+    #[Assert\NotBlank(message: "SKU should not be blank")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "SKU must be at least {{ limit }} characters long",
+        maxMessage: "SKU cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9_-]+$/",
+        message: "SKU can only contain letters, numbers, underscores, and hyphens"
+    )]
+    
     private ?string $sku = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Assert\Type('float')]
-    private ?string $price = null;
+    #[Assert\NotBlank(message: "Price should not be blank")]
+    #[Assert\GreaterThan(
+        value: 0,
+        message: "Price must be a positive number"
+    )]
+    private ?float $price = null;
 
     #[ORM\Column]
+    #[Assert\Type('\DateTime')]
+    #[Assert\NotBlank(message: "Entry date should not be blank")]
     private ?\DateTime $entry_date = null;
 
     #[ORM\Column]
     #[Assert\Type('boolean')]
+    #[Assert\NotNull(message: "Status should not be null")]
     private ?bool $status = null;
+
+    public function __construct()
+    {
+        $this->entry_date = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -63,12 +96,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): static
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 

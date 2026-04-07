@@ -3,31 +3,82 @@
 {% block title %} List of Products {% endblock %}
 
 {% block body %}
-<h1 class="bg-primary text-white p-3">List of Products</h1>
-<button class="btn btn-success mb-3" onclick="window.location.href='{{ path('product_create') }}'">Create New Product</button>
+<h1 class="text-black p-3">List of Products</h1>
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="window.location.href='{{ path('product_create') }}'">Create New</button>
 
+<div class="overflow-x-auto bg-white shadow-md rounded-xl my-5">
+    <table class="min-w-full text-sm text-left text-gray-600">
+        
+        <thead class="bg-gray-800 text-white uppercase text-xs">
+            <tr>
+                <th class="px-6 py-3">SL No.</th>
+                <th class="px-6 py-3">Name</th>
+                <th class="px-6 py-3">SKU</th>
+                <th class="px-6 py-3">Price</th>
+                <th class="px-6 py-3">Entry Date</th>
+                <th class="px-6 py-3">Status</th>
+                <th class="px-6 py-3 text-center">Actions</th>
+            </tr>
+        </thead>
 
-<table class="w-full border-collapse border border-gray-300">
-    <thead class="bg-gray-200">
-        <tr>
-            <th class="border border-gray-300 px-4 py-2 text-left">Product Name</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">SKU</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">Price</th>
-            <th class="border border-gray-300 px-4 py-2 text-left">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in products %}
-        <tr class="hover:bg-gray-100">
-            <td class="border border-gray-300 px-4 py-2">{{ product.name }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ product.sku }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ product.price }}</td>
-            <td class="border border-gray-300 px-4 py-2">
-                <button class="btn btn-sm btn-primary" onclick="window.location.href='{{ path('product_edit', {'id': product.id}) }}'">Edit</button>
-                <button class="btn btn-sm btn-danger" onclick="window.location.href='{{ path('product_delete', {'id': product.id}) }}'">Delete</button>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <tbody class="divide-y divide-gray-200">
+            {% for product in products %}
+                <tr class="hover:bg-gray-50 transition">
+                    
+                    <td class="px-6 py-4">
+                        {{ loop.index }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ product.name }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ product.sku }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ product.price|number_format(2) }} USD
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ product.entryDate|date('Y-m-d') }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {% if product.status %}
+                            <span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
+                                Active
+                            </span>
+                        {% else %}
+                            <span class="px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">
+                                Inactive
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-6 py-4 text-center space-x-2">
+                        <a href="{{ path('product_edit', {'id': product.id}) }}"
+                           class="inline-block px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition">
+                            Edit
+                        </a>
+
+                        <a href="{{ path('product_delete', {'id': product.id}) }}"
+                           class="inline-block px-3 py-1 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
+                           onclick="return confirm('Are you sure?')">
+                            Delete
+                        </a>
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                        No products found.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,4 +1,4 @@
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{# {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
     {{ form_row(form.name) }}
     {{ form_row(form.sku) }}
@@ -7,7 +7,93 @@
     {{ form_row(form.status) }}
 
     <div class="form-group mt-3">
-        <button class="btn btn-primary" type="submit">Create</button>
+        <button class="btn btn-primary" type="submit">{{ form.vars.value.id ? 'Update' : 'Create' }}</button>
     </div>
 
-{{ form_end(form) }}
+{{ form_end(form) }} #}
+
+
+<div class="max-w-2xl mx-auto bg-white shadow-xl rounded-2xl p-6 mt-6">
+
+    {# Title #}
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {{ form.vars.value.id ? '✏️ Edit Product' : '➕ Create Product' }}
+    </h2>
+
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {# validation errors #}
+            {# {% if not form.vars.valid %}
+                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %} #}
+
+            <div class="md:col-span-2">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+                <div class="text-red-500 text-sm">
+                    {{ form_errors(form.name) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.sku) }}
+                {{ form_widget(form.sku) }}
+                <div class="text-red-500 text-sm">
+                    {{ form_errors(form.sku) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.price) }}
+                {{ form_widget(form.price) }}
+                <div class="text-red-500 text-sm">
+                    {{ form_errors(form.price) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.entry_date) }}
+                {{ form_widget(form.entry_date) }}
+                 <div class="text-red-500 text-sm">
+                    {{ form_errors(form.entry_date) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.status) }}
+                {{ form_widget(form.status) }}
+                <div class="text-red-500 text-sm">
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+
+        </div>
+
+        {# Buttons #}
+        <div class="flex justify-between items-center mt-6">
+
+            <a href="{{ path('product_list') }}"
+               class="text-sm text-gray-500 hover:text-gray-700 transition">
+                ← Back to list
+            </a>
+
+            <button type="submit"
+                class="px-6 py-2 text-white font-medium rounded-lg shadow
+                {{ form.vars.value.id 
+                    ? 'bg-yellow-500 hover:bg-yellow-600' 
+                    : 'bg-blue-600 hover:bg-blue-700' }} 
+                transition">
+                
+                {{ form.vars.value.id ? 'Update Product' : 'Create Product' }}
+            </button>
+
+        </div>
+
+    {{ form_end(form) }}
+
+</div>
