@@ -4,5 +4,8 @@
 
 {% block body %}
     <h1>Create Product</h1>
-    {{ form(form) }}
+    {# include the form template, and pass the form variable to it #}
+    {# render the form using form_start, form_row, and form_end functions #}
+    {% include 'product/_from.html.twig' with {'form': form} %}
+   
 {% endblock %}

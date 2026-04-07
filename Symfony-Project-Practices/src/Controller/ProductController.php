@@ -5,20 +5,22 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository; // add the ProductRepository class here
+use App\Traits\FlashMessageTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Builder\Method;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+// use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 #[Route("/products")]
-final class ProductController extends AbstractController
+class ProductController extends AbstractController
 {
-   
+
+    // use traits
+    use FlashMessageTrait;
 
     // list all products
     #[Route("/index", methods: ['GET'], name: "product_list")]
@@ -39,7 +41,7 @@ final class ProductController extends AbstractController
     }
 
     // view a single product
-    #[Route("/{id}", methods: ['GET'], name: "product_show")]
+    #[Route("/{id}", methods: ['GET'], name: "product_show", requirements: ["id" => "\d+"])]
     public function show($id, ManagerRegistry $managerRegistry): Response
     {
         $repository = $managerRegistry->getRepository(Product::class);
@@ -57,26 +59,34 @@ final class ProductController extends AbstractController
 
 
     // create a new product via entity manager, and handle form submission
-    #[Route("/create", methods: ['GET'], name: "product_create")]
+    #[Route("/create", methods: ['GET', 'POST'], name: "product_create")]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {        $product = new Product();
-        // $product->setCreatedAt(new \DateTimeImmutable());
+    {
+        $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        
+
+        // dd($request->request->all(), $form->isSubmitted(), $form->isValid(), $product);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $submittedData = $form->getData();
-            dump($submittedData);
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $entityManager->persist($product); // persist the product entity to the database
+            $entityManager->flush(); // flush the changes to the database
+
+            // flash a success message to the session
+            $this->addFlash("success", "Product created successfully!");
+
             return $this->redirectToRoute("product_list");
         }
+
         return $this->render("product/create.html.twig", [
-            "form" => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
+
     // edit an existing product
-    #[Route("/{id}/edit", methods: ['GET', 'POST'], name: "product_edit")]
+    #[Route("/edit/{id}", methods: ['GET', 'POST'], name: "product_edit", requirements: ["id" => "\d+"])]
     public function edit(
         Product $product,
         Request $request,
@@ -97,14 +107,26 @@ final class ProductController extends AbstractController
     }
 
     // delete a product
-    #[Route("/{id}/delete", methods: ['GET', 'DELETE'], name: "product_delete")]
+    #[Route("/delete/{id}", methods: ['GET', 'DELETE'], name: "product_delete", requirements: ["id" => "\d+"])]
     public function delete(
         Product $product,
+        Request $request,
         EntityManagerInterface $em,
     ): Response {
-        $em->remove($product);
-        $em->flush();
 
-        return $this->redirectToRoute("product_list");
+        if($request->isMethod("DELETE")) {
+            $em->remove($product);
+            $em->flush();
+
+            // flash a success message to the session
+            $this->addFlash("success", "Product deleted successfully!");
+
+            return $this->redirectToRoute("product_list");
+        }
+
+        // render a confirmation page before deleting the product
+        return $this->render("product/index.html.twig", [
+            "product" => $product,
+        ]);
     }
 }

@@ -56,6 +56,9 @@ Encore
     config.corejs = "3.38";
   })
 
+  // Optional: add support for PostCSS
+  .enablePostCssLoader()
+
   // enables Sass/SCSS support
   //.enableSassLoader()
 
@@ -85,8 +88,7 @@ Encore
 //   },
 // });
 
-// Optional: add support for PostCSS
-// .enablePostCssLoader()
+
 
 // Optional: add support for Tailwind CSS
 // .enableTailwindLoader()

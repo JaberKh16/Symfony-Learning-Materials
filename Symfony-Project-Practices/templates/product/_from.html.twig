@@ -1,0 +1,13 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.sku) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.entry_date) }}
+    {{ form_row(form.status) }}
+
+    <div class="form-group mt-3">
+        <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+
+{{ form_end(form) }}
