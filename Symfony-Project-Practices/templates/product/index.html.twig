@@ -7,10 +7,39 @@
 <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="window.location.href='{{ path('product_create') }}'">Create New</button>
 
 <div class="overflow-x-auto bg-white shadow-md rounded-xl my-5">
-    <table class="min-w-full text-sm text-left text-gray-600">
+
+    {# BATCH ACTION BAR  #}
+    <div class="flex items-center justify-between mb-4 p-3 bg-gray-100 rounded-lg shadow-sm">
         
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-blue-600"></i>
+            <span class="font-semibold text-sm">Batch Actions</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <select name="status" class="border rounded px-3 py-1 text-sm">
+                <option value="">Change Status</option>
+                <option value="active">✅ Active</option>
+                <option value="inactive">⚠️ Inactive</option>
+                <option value="deleted">❌ Deleted</option>
+            </select>
+
+            <button type="submit"
+                class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                <i class="fa-solid fa-rotate"></i>
+                Apply
+            </button>
+        </div>
+    </div>
+
+
+    {# Table #}
+    <table class="min-w-full text-sm text-left text-gray-600">
         <thead class="bg-gray-800 text-white uppercase text-xs">
             <tr>
+                <th class="p-2">
+                    <input type="checkbox" id="selectAll">
+                </th>
                 <th class="px-6 py-3">SL No.</th>
                 <th class="px-6 py-3">Name</th>
                 <th class="px-6 py-3">SKU</th>
@@ -24,7 +53,10 @@
         <tbody class="divide-y divide-gray-200">
             {% for product in products %}
                 <tr class="hover:bg-gray-50 transition">
-                    
+                    <td class="p-2">
+                        <input type="checkbox" name="ids[]" value="{{ product.id }}" class="rowCheckbox">
+                    </td>
+
                     <td class="px-6 py-4">
                         {{ loop.index }}
                     </td>
@@ -60,13 +92,13 @@
                     <td class="px-6 py-4 text-center space-x-2">
                         <a href="{{ path('product_edit', {'id': product.id}) }}"
                            class="inline-block px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition">
-                            Edit
+                            <i class="fa-solid fa-edit"></i> Edit
                         </a>
 
                         <a href="{{ path('product_delete', {'id': product.id}) }}"
                            class="inline-block px-3 py-1 text-xs font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
                            onclick="return confirm('Are you sure?')">
-                            Delete
+                           <i class="fa-solid fa-trash"></i> Delete
                         </a>
                     </td>
 
@@ -81,4 +113,16 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Select/Deselect all checkboxes
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.rowCheckbox');
+            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        });
+    </script>
 {% endblock %}

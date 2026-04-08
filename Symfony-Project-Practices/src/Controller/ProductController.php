@@ -132,4 +132,54 @@ class ProductController extends AbstractController
             "product" => $product,
         ]);
     }
+
+    // single status update (active/inactive)
+    #[Route("/status/{id}", methods: ['POST'], name: "product_status_update ", requirements: ["id" => "\d+"])]
+    public function updateStatus(Product $product, EntityManagerInterface $em): Response
+    {
+        $product->setIsActive(!$product->getIsActive());
+        $em->flush();
+        // flash a success message to the session
+        $this->addFlash("success", "Product status updated successfully!");
+        return $this->redirectToRoute("product_list");
+    }
+
+    // bulk status update (active/inactive)
+    #[Route("/status/bulk-update", methods: ['POST'], name: "product_bulk_status_update")]
+    public function bulkUpdateStatus(Request $request, ProductRepository $productRepository, EntityManagerInterface $em): Response
+    {
+        $ids = $request->request->get('ids', []);
+        if (empty($ids)) {
+            $this->addFlash("warning", "No products selected for bulk status update.");
+            return $this->redirectToRoute("product_list");
+        }
+        $products = $productRepository->findBy(['id' => $ids]);
+        foreach ($products as $product) {
+            $product->setIsActive(!$product->getIsActive());
+        }
+        $em->flush();
+        // flash a success message to the session
+        $this->addFlash("success", "Selected products' status updated successfully!");
+        return $this->redirectToRoute("product_list");
+    }
+
+    // bulk delete products
+    #[Route("/bulk-delete", methods: ['POST'], name: "product_bulk_delete")]
+    public function bulkDelete(Request $request, ProductRepository $productRepository, EntityManagerInterface $em): Response
+    {
+        $ids = $request->request->get('ids', []);
+        if (empty($ids)) {
+            $this->addFlash("warning", "No products selected for bulk deletion.");
+            return $this->redirectToRoute("product_list");
+        }
+        $products = $productRepository->findBy(['id' => $ids]);
+        foreach ($products as $product) {
+            $em->remove($product);
+        }
+        $em->flush();
+        // flash a success message to the session
+        $this->addFlash("success", "Selected products deleted successfully!");
+        return $this->redirectToRoute("product_list");
+    } 
+
 }
