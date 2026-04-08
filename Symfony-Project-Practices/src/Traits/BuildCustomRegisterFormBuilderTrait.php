@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-trait BuildCustomRegisterFormTrait
+trait BuildCustomRegisterFormBuilderTrait
 {
-    protected function buildCustomRegisterForm(
+    protected function buildCustomRegisterFor(
         $data = null,
         array $options = []
     ) {

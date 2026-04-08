@@ -30,6 +30,12 @@
                     <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-md text-sm">
                         {{ form_errors(form) }}
                     </div>
+
+                     <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            showToast("Please fix the errors in the form.", "error");
+                        });
+                    </script>
                 {% endif %}
 
                 <!-- Username -->
@@ -116,4 +122,54 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {# <script src="{{ asset('js/toast.js') }}"></script> #}
+
+    <script>
+        function showToast(message, type = "success") {
+            const container = document.getElementById("toast-container");
+
+            const toast = document.createElement("div");
+            toast.className = `
+                px-4 py-3 rounded-lg shadow-md text-white text-sm
+                ${type === "error" ? "bg-red-500" : "bg-green-500"}
+                animate-fade-in
+            `;
+            toast.innerText = message;
+
+            container.appendChild(toast);
+
+            // Auto remove after 3s
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let errors = `{{ form_errors(form)|striptags }}`;
+            if (errors.trim() !== "") {
+                showToast(errors, "error");
+            }
+        });
+    </script>
+
+
+       
+
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+        }
+    </style>
 {% endblock %}

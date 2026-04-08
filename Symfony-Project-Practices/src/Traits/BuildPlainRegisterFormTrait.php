@@ -13,8 +13,8 @@ trait BuildPlainRegisterFormTrait
     {
         return $this->createFormBuilder()
             ->add('username', null, [
-                'label'       => 'Username',
-                'attr'        => ['placeholder' => 'Enter your username'],
+                'label' => 'Username',
+                'attr' => ['placeholder' => 'Enter your username'],
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Username is required',
@@ -22,8 +22,8 @@ trait BuildPlainRegisterFormTrait
                 ],
             ])
             ->add('email', null, [
-                'label'       => 'Email',
-                'attr'        => ['placeholder' => 'Enter your email address'],
+                'label' => 'Email',
+                'attr' => ['placeholder' => 'Enter your email address'],
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'Email is required',
@@ -32,7 +32,7 @@ trait BuildPlainRegisterFormTrait
                         'message' => 'Invalid email address.',
                     ]),
                     new Assert\Length([
-                        'max'        => 255,
+                        'max' => 255,
                         'maxMessage' => 'Email cannot be longer than {{ limit }} characters',
                     ]),
                     new Assert\Unique([
@@ -45,29 +45,22 @@ trait BuildPlainRegisterFormTrait
                 ],
             ])
             ->add('password', RepeatedType::class, [
-                'type'            => PasswordType::class,
-                'first_options'   => ['label' => 'Password'],
-                'second_options'  => ['label' => 'Repeat Password'],
-                'invalid_message' => 'Passwords do not match.',
-                'attr'            => ['placeholder' => 'Enter your password'],
-                'constraints'     => [
-                    new Assert\NotBlank(),
-                    'constraints' => [
-                        new Assert\NotBlank(),
-                        new Assert\Length([
-                            'min'        => 6,
-                            'minMessage' => 'Password must be at least 6 characters',
-                        ]),
-                        new Assert\Regex([
-                            'pattern' => '/^(?=.*[A-Z])(?=.*\d).+$/',
-                            'message' => 'Password must contain at least one uppercase letter and one number.',
-                        ]),
-                    ],
+                'type' => PasswordType::class,
+                'first_options'  => ['label' => 'Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+                'invalid_message' => 'The password fields must match.',
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Password is required',
+                    ]),
+                    new Assert\Length([
+                        'min' => 6,
+                        'minMessage' => 'Password must be at least {{ limit }} characters long',
+                    ]),
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Register',
-                'attr'  => ['class' => 'mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'],
             ])
             ->getForm();
     }
