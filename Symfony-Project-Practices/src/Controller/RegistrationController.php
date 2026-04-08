@@ -2,61 +2,37 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Traits\BuildCustomRegisterFormTrait;
+use App\Traits\BuildPlainRegisterFormTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints as Assert;
+// use Symfony\Component\Validator\Constraints as Assert;
 
 
 final class RegistrationController extends AbstractController
 {
+    use BuildPlainRegisterFormTrait, BuildCustomRegisterFormTrait {
+        BuildCustomRegisterFormTrait::buildCustomRegisterForm insteadof BuildCustomRegisterFormTrait;
+        BuildPlainRegisterFormTrait::buildPlainRegisterForm insteadof BuildPlainRegisterFormTrait;
+    }
+
+
     #[Route('/register', name: 'app_register')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // setup a form with form builder
-        $form = $this->createFormBuilder()
-            ->add('username', null, [
-                'label' => 'Username',
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Username is required',
-                    ]),
-                ],
-            ])
-            ->add('email', null, [
-                'label' => 'Email',
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Email is required',
-                    ]),
-                    new Assert\Email([
-                        'message' => 'Invalid email address.',
-                    ]),
-                ],
-            ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password'],
-                'invalid_message' => 'Passwords do not match.',
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length([
-                        'min' => 6,
-                        'minMessage' => 'Password must be at least 6 characters',
-                    ]),
-                ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Register',
-                'attr' => ['class' => 'btn btn-primary mt-3'],
-            ])
-            ->getForm();
+        // $form = $this->buildPlainRegisterForm(); // using plain form builder trait
+
+        // using custom form builder trait with options
+        $form = $this->buildCustomRegisterForm(null, [
+            'include_username' => true,
+            'include_password' => true,
+            'submit_label' => 'Sign Up',
+        ]);
 
 
         // handle form submission
@@ -82,7 +58,6 @@ final class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/index.html.twig', [
-            'controller_name' => 'RegistrationController',
             'form' => $form->createView(),
         ]);
     }
