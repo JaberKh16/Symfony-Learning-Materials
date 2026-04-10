@@ -1,0 +1,38 @@
+monolog:
+    channels: ['activity']
+    handlers:
+        main:
+            type: rotating_file
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            max_files: 30
+
+        # additional log channel for user activities
+        activity:
+            type: rotating_file
+            path: "%kernel.logs_dir%/activity.log"
+            level: info
+            channels: ['activity']
+            max_files: 15
+
+
+# production based logs
+# monolog:
+#     handlers:
+#         main:
+#             type: rotating_file
+#             path: "%kernel.logs_dir%/prod.log"
+#             level: error
+#             max_files: 30
+
+
+
+# JSON log format
+# monolog:
+#     handlers:
+#         main:
+#             type: rotating_file
+#             path: "%kernel.logs_dir%/api.log"
+#             formatter: monolog.formatter.json
+#             level: info
+#             max_files: 15
