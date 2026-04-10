@@ -3,10 +3,13 @@
 {% block title %} List of Products {% endblock %}
 
 {% block body %}
-<h1 class="text-black p-3">List of Products</h1>
-<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="window.location.href='{{ path('product_create') }}'">Create New</button>
 
-<div class="overflow-x-auto bg-white shadow-md rounded-xl my-5">
+<div class="bg-white shadow-md rounded-xl my-5 mx-5 flex items-center justify-start">
+    <h1 class="text-2xl font-bold text-gray-800 p-3 mx-5 my-5">List of Products</h1>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mx-4 my-4 rounded" onclick="window.location.href='{{ path('product_create') }}'">Create New</button>
+</div>
+
+<div class="overflow-x-auto bg-white shadow-md rounded-xl my-5 mx-5 px-5 py-5">
 
     {# BATCH ACTION BAR  #}
     <div class="flex items-center justify-between mb-4 p-3 bg-gray-100 rounded-lg shadow-sm">

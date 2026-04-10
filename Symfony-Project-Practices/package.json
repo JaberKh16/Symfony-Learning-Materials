@@ -5,6 +5,7 @@
         "@symfony/webpack-encore": "^6.0.0",
         "autoprefixer": "^10.4.27",
         "core-js": "^3.38.0",
+        "daisyui": "^5.5.19",
         "file-loader": "^6.2.0",
         "postcss": "^8.5.8",
         "postcss-loader": "^8.2.1",
