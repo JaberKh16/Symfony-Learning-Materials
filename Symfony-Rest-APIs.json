@@ -1,0 +1,130 @@
+{
+  "info": {
+    "_postman_id": "1ba599fa-5733-4dca-954d-1fc26fcbba0b",
+    "name": "Symfony Rest APIs",
+    "description": "This collection is about Symfony based Rest APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "id": "2a27e41f-3382-4879-b797-a50b1be75a97",
+      "name": "/api/products/show",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_domain}}/api/products/show",
+          "host": [
+            "{{local_domain}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "show"
+          ],
+          "protocol": "https"
+        }
+      },
+      "response": [],
+      "event": []
+    },
+    {
+      "id": "bb4e851f-ebe9-4310-9c10-9575518bd173",
+      "name": "/api/products/index",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{local_domain}}/api/products/index",
+          "host": [
+            "{{local_domain}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "index"
+          ],
+          "protocol": "https"
+        }
+      },
+      "response": [],
+      "event": []
+    },
+    {
+      "id": "cb5ea6db-6411-4dd2-8c45-81232e2df251",
+      "name": "/api/products/create",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{local_domain}}/api/products/create",
+          "host": [
+            "{{local_domain}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "create"
+          ],
+          "protocol": "https"
+        }
+      },
+      "response": [],
+      "event": []
+    },
+    {
+      "id": "378a5aad-903b-432d-995b-4dfee6d02f96",
+      "name": "/api/products/edit/{id}",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{local_domain}}/api/products/edit/1",
+          "host": [
+            "{{local_domain}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "edit",
+            "1"
+          ],
+          "protocol": "https"
+        }
+      },
+      "response": [],
+      "event": []
+    },
+    {
+      "id": "cfc7b408-97e3-4262-94e7-939afd27176f",
+      "name": "/api/products/delete/{id}",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{local_domain}}/api/products/delete/1",
+          "host": [
+            "{{local_domain}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "delete",
+            "1"
+          ],
+          "protocol": "https"
+        }
+      },
+      "response": [],
+      "event": []
+    }
+  ],
+  "variable": [
+    {
+      "id": "87f28384-4016-42cb-b323-d27b4bbe6522",
+      "key": "local_domain",
+      "value": "http://locahost:8000",
+      "type": "default"
+    }
+  ]
+}
